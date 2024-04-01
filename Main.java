@@ -1,50 +1,29 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         final String filename = "src/City.csv";
 
-        List<City> cities = readCitiesFromCSV(filename);
-        printCities(cities);
-    }
+        DataReader reader = new CVSCityDataReader();
+        List<City> cities = reader.readCities(filename);
 
-    public static List<City> readCitiesFromCSV(String filename) {
-        List<City> cities = new ArrayList<>();
+//        Сортировка списка городов по наименованию в алфавитном порядке по убыванию без учета регистра;
+//        В ответах для проверки нет сортировки по убыванию!
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(";");
-                if (parts.length == 6) {
-                    String name = parts[1].trim();
-                    String region = parts[2].trim();
-                    String district = parts[3].trim();
-                    long population = Long.parseLong(parts[4].trim());
-                    String foundation = parts[5].trim();
+        CitySorter sorter1 = new CitySortedByName();
+        cities = sorter1.sort(cities);
+//
+        CityPrinter printer = new CityPrinterImpl();
 
-                    City city = new City(name, region, district, population, foundation);
-                    cities.add(city);
-                } else {
-                    System.out.println("incorrect format data in cvs file");
-                }
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        System.out.println("SORTING BY NAME IN DESCENDING ORDER: ");
+        printer.printer(cities);
+        System.out.println("\n");
 
-        return cities;
-    }
 
-    public static void printCities(List<City> cities) {
-        for(City city : cities) {
-            System.out.println(city);
-        }
+        CitySorter sorter2 = new CitySortedByDistrictAndName();
+        cities = sorter2.sort(cities);
+        System.out.println("SORTING BY DISTRICT AND NAME IN DESCENDING ORDER: ");
+        printer.printer(cities);
+
     }
 }
