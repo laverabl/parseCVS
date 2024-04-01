@@ -1,4 +1,6 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,7 +27,11 @@ public class Main {
 //        System.out.println("SORTING BY DISTRICT AND NAME IN DESCENDING ORDER: ");
 //        printer.printer(cities);
 
-        analyzerPopulation(cities);
+//        analyzerPopulation(cities);
+
+        System.out.println();
+
+        printCityCountByRegion(cities);
 
     }
 
@@ -42,5 +48,18 @@ public class Main {
         }
 
         System.out.println("[" + maxPopulationIndex + "] = " + maxPopulation);
+    }
+
+
+    public static void printCityCountByRegion(List<City> cities) {
+        Map<String, Integer> regionCityCount = new HashMap<>();
+
+        for (City city : cities) {
+            regionCityCount.merge(city.getRegion(),1, Integer::sum);
+        }
+
+        for (Map.Entry<String, Integer> entry : regionCityCount.entrySet()) {
+            System.out.println(entry.getKey() + " - " + entry.getValue());
+        }
     }
 }

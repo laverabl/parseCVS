@@ -25,7 +25,8 @@ public class CVSCityDataReader implements  DataReader {
                     City city = new City(name, region, district, population, foundation);
                     cities.add(city);
                 } else {
-                    System.out.println("Incorrect line data " + parts[0].trim());
+                    System.out.println("Incorrect line data: " + line);
+
                 }
             }
         } catch (FileNotFoundException e) {
